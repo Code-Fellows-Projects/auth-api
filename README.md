@@ -8,8 +8,8 @@
 
 + [Heroku](https://stacyburris-auth-api.herokuapp.com/)
 + [GitHub](https://github.com/stacyburris/auth-api)
-+ [ci/cd]()
-+ [PullRequest]()
++ [ci/cd](https://github.com/stacyburris/auth-api/actions)
++ [PullRequest](https://github.com/stacyburris/auth-api/pull/3)
 
 ### Setup
 
