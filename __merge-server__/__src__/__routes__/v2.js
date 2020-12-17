@@ -1,9 +1,12 @@
 'use strict';
 
+'use strict';
+
 const fs = require('fs');
 const express = require('express');
 const Collection = require('../models/data-collection.js');
-
+const bearerAuth = require('../__middleware__/bearer.js');
+const permissions = require('../__middleware__/acl.js');
 const router = express.Router();
 
 const models = new Map();
@@ -15,16 +18,10 @@ router.param('model', (req, res, next) => {
     next();
   } else {
     const fileName = `${__dirname}/../models/__${modelName}__/model.js`;
-    //console.log('Hello', fileName);
     if (fs.existsSync(fileName)) {
-      ///console.log('FILENAME 1', fileName);
       const model = require(fileName);
-      //console.log('hi', model);
-      //console.log('FILENAME', fileName);
       models.set(modelName, new Collection(model));
-      //console.log('MODEL', model)
       req.model = models.get(modelName);
-      //console.log('NAME OF MODEL', modelName);
       next();
     }
     else {
@@ -33,11 +30,11 @@ router.param('model', (req, res, next) => {
   }
 });
 
-router.get('/:model', handleGetAll);
-router.get('/:model/:id', handleGetOne);
-router.post('/:model', handleCreate); //clothes
-router.put('/:model/:id', handleUpdate);
-router.delete('/:model/:id', handleDelete);
+router.get('/:model', bearerAuth, permissions('read'), handleGetAll);
+router.get('/:model/:id', bearerAuth, permissions('read'), handleGetOne);
+router.post('/:model', bearerAuth, permissions('create'), handleCreate);
+router.put('/:model/:id', bearerAuth, permissions('update'), handleUpdate);
+router.delete('/:model/:id', bearerAuth, permissions('delete'), handleDelete);
 
 async function handleGetAll(req, res) {
   let allRecords = await req.model.get();
