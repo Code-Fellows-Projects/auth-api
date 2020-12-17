@@ -1,4 +1,3 @@
-
 'use strict';
 
 require('dotenv').config();
@@ -13,4 +12,4 @@ const options = {
 mongoose.connect(process.env.MONGODB_URI, options);
 
 // Start the web server
-require('./src/server.js').start(process.env.PORT);
+require('./__merge-server__/__src__/server.js').start(process.env.PORT);
